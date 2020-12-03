@@ -1,0 +1,43 @@
+<html>
+<head> <title>Шарафиева Ксения</title> </head>
+<body style=" background-color:#FFFFCC">
+   <?php
+$link = mysqli_connect("localhost", "f0478659_root", "123","f0478659_cars");
+
+if (!$link) {
+    echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
+    echo "Код ошибки errno: " . mysqli_connect_errno() . PHP_EOL;
+    echo "Текст ошибки error: " . mysqli_connect_error() . PHP_EOL;
+    
+    exit;
+}
+?>
+
+<h2>Список машин:</h2>
+<table border="1">
+<tr> 
+<th> Номер </th> <th bgcolor="#ADFF2F"> Марка </th> <th> Модель </th><th bgcolor="#ADFF2F"> Год выпуска </th><th> Трансмиссия </th><th bgcolor="#ADFF2F"> Объем выпуска </th><th> Цена </th>
+ <th>  Редактировать </th> <th bgcolor='#DC143C'> Уничтожить </th> </tr>
+<?php
+$result= mysqli_query($link,"SELECT * FROM mashina");
+while ($row=mysqli_fetch_array($result)){// для каждой строки из запроса
+ echo "<tr>";
+echo "<td>" . $row['id_car'] . "</td>";
+ echo "<td bgcolor='#ADFF2F'>" . $row['name'] . "</td>";
+ echo "<td>" . $row['model'] . "</td>";
+ echo "<td bgcolor='#ADFF2F'>" . $row['year'] . "</td>";
+ echo "<td>" . $row['trans'] . "</td>";
+ echo "<td bgcolor='#ADFF2F'>" . $row['value'] . "</td>";
+ echo "<td>" . $row['cost'] . "</td>";
+$id_car=$row['id_car'];
+ echo "<td><a href='edit.php?id=" . $id_car. "'>Редактировать</a></td>"; // запуск скрипта для редактирования
+ echo "<td bgcolor='#DC143C'><a href='delete.php?id=" . $id_car. "'>Удалить</a></td>"; // запуск скрипта для удаления записи
+ echo "</tr>";
+}
+print "</table>";
+echo ('<form method="POST" action="edit.php?id='. urlencode($id_car).'">');
+$num_rows = mysqli_num_rows($result); // число записей в таблице БД
+print("<P>Всего наименований: $num_rows </p>");
+?>
+<p> <a href="new.php"> Добавить машину </a>
+</body> </html>
